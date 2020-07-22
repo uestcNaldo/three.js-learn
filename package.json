@@ -1,0 +1,21 @@
+{
+  "name": "three.js-learn",
+  "version": "1.0.0",
+  "description": "Three.js Practice",
+  "private": true,
+  "author": "Naldo Wang <naldo_wang9641@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack-dev-server --config build/webpack.config.js --progress"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "three": "^0.118.3"
+  }
+}
