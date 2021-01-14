@@ -16,7 +16,8 @@ module.exports = {
         contentBase: path.resolve(__dirname, '../public'),
         port: 9000,
         hot: true,
-        open: false
+        open: true,
+        host: '0.0.0.0'
     },
     plugins: [
         new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
