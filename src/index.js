@@ -1,19 +1,26 @@
 import * as THREE from 'three'
 import Stats from 'stats.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader'
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper'
+import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib'
 
-import { FlyControls } from 'three/examples/jsm/controls/FlyControls'
+RectAreaLightUniformsLib.init()
 
+// 统计帧数
 const stats = new Stats()
 stats.showPanel(0)
 document.body.appendChild(stats.dom)
 
-const clock = new THREE.Clock()
-
 // 场景
 const scene = new THREE.Scene()
+const fog = new THREE.FogExp2(0x8CB6DE)
+scene.background = new THREE.Color(0x8CB6DE)
+scene.fog = fog
 
 // 相机
-const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000)
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000000)
 camera.position.set(10, 10, 10)
 camera.lookAt(0, 0, 0)
 
@@ -24,37 +31,46 @@ const renderer = new THREE.WebGLRenderer({canvas, antialias: true})
 // renderer.setPixelRatio(window.devicePixelRatio)
 
 // 光线
-const light = new THREE.DirectionalLight(0xffffff, 1)
-light.position.set(30, 50, 40)
-scene.add(light)
+const mainLight = new THREE.DirectionalLight(0xffffff, 0.5)
+mainLight.position.set(30, 50, 10)
+mainLight.lookAt(0, 0, 0)
+scene.add(mainLight)
 
-// 立方体
-const cubeGeometry = new THREE.BoxGeometry(5, 5, 5)
-const cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x0099cc })
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-scene.add(cube)
+const minorLight = new THREE.DirectionalLight(0xffffff, 0.5)
+minorLight.position.set(-100, 50, -10)
+scene.add(minorLight)
 
-const lineMaterial = new THREE.LineBasicMaterial({ color: 0x0a912f })
-const linePoints = [
-    new THREE.Vector3(-10, 0, 0),
-    new THREE.Vector3(0, 10, 0),
-    new THREE.Vector3(10, 0, 0)
-]
-const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePoints)
-const line = new THREE.Line(lineGeometry, lineMaterial)
-scene.add(line)
+const topLight = new THREE.HemisphereLight(0x8CB6DE, 0x000000, 0.5)
+topLight.position.set(0, 50, 0)
+topLight.lookAt(0, 0, 0)
+scene.add(topLight)
 
-// 坐标轴
-const axesHelper = new THREE.AxesHelper(15)
-scene.add(axesHelper)
+// 控制器
+const control = new OrbitControls(camera, renderer.domElement)
+control.enableDamping = true
+control.dampingFactor = 0.1
+control.maxPolarAngle = Math.PI / 2
+control.mouseButtons = {
+    LEFT: THREE.MOUSE.ROTATE,
+    RIGHT: THREE.MOUSE.PAN,
+    MIDDLE: THREE.MOUSE.DOLLY
+}
 
-const control = new FlyControls(camera, renderer.domElement)
+// Collada加载.dae模型文件
+const colladaLoader = new ColladaLoader()
+colladaLoader.load('/assets/b_35F_3.dae', function (result) {
+    console.log(result)
+    const mesh = result.scene
+    mesh.scale.set(0.05, 0.05, 0.05);
+    mesh.position.set(0, 0, 0);
+    scene.add(mesh)
+})
 
 // 使得渲染器的内容大小为显示容器的大小
 function resizeRendererToDisplaySize (renderer) {
     const pixelRatio = window.devicePixelRatio
-    const displayWidth = canvas.clientWidth * pixelRatio || 0
-    const displayHeight = canvas.clientHeight * pixelRatio || 0
+    const displayWidth = canvas.clientWidth * pixelRatio | 0
+    const displayHeight = canvas.clientHeight * pixelRatio | 0
     const needResize = canvas.width !== displayWidth || canvas.height !== displayHeight
     if (needResize) {
         renderer.setSize(displayWidth, displayHeight, false)
@@ -64,26 +80,19 @@ function resizeRendererToDisplaySize (renderer) {
 
 // 渲染
 function animate (timeStamp) {
-    requestAnimationFrame(animate)
-
     stats.begin()
 
     if (resizeRendererToDisplaySize(renderer)) {
         camera.aspect = canvas.clientWidth / canvas.clientHeight
         camera.updateProjectionMatrix()
     }
-    
-    const delta = clock.getDelta()
 
-    const time = timeStamp * 0.001
-    cube.rotation.x = time
-    cube.rotation.y = time
-    cube.rotation.z = time
-
-    control.update(delta)
+    control.update()
 
     renderer.render(scene, camera)
 
     stats.end()
+
+    requestAnimationFrame(animate)
 }
 animate()
