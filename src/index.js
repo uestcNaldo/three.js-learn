@@ -58,7 +58,7 @@ control.mouseButtons = {
 
 // Collada加载.dae模型文件
 const colladaLoader = new ColladaLoader()
-colladaLoader.load('/assets/b_35F_3.dae', function (result) {
+colladaLoader.load('/assets/vibration_device/e_振动设备-烘培.dae', function (result) {
     console.log(result)
     const mesh = result.scene
     mesh.scale.set(0.05, 0.05, 0.05);
