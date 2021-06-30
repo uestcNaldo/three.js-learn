@@ -3939,10 +3939,10 @@ terser@^4.1.2, terser@^4.6.3:
     source-map "~0.6.1"
     source-map-support "~0.5.12"
 
-three@^0.128.0:
-  version "0.128.0"
-  resolved "https://registry.nlark.com/three/download/three-0.128.0.tgz#884dacca6a330e45600a09ec5439283f50b76aa6"
-  integrity sha1-iE2symozDkVgCgnsVDkoP1C3aqY=
+three@^0.129.0:
+  version "0.129.0"
+  resolved "https://registry.nlark.com/three/download/three-0.129.0.tgz#f5e530bbc96eac5d5b4749cb5da886ef0d42f554"
+  integrity sha1-9eUwu8lurF1bR0nLXaiG7w1C9VQ=
 
 through2@^2.0.0:
   version "2.0.5"

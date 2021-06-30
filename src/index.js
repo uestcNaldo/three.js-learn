@@ -16,8 +16,9 @@ document.body.appendChild(stats.dom)
 // 场景
 const scene = new THREE.Scene()
 const fog = new THREE.FogExp2(0x8CB6DE)
-scene.background = new THREE.Color(0x8CB6DE)
-scene.fog = fog
+// scene.background = new THREE.Color(0x8CB6DE)
+scene.background = new THREE.Color(0x6a6869)
+// scene.fog = fog
 
 // 相机
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000000)
@@ -30,20 +31,35 @@ const renderer = new THREE.WebGLRenderer({canvas, antialias: true})
 // renderer.setSize(window.innerWidth, window.innerHeight)
 // renderer.setPixelRatio(window.devicePixelRatio)
 
-// 光线
-const mainLight = new THREE.DirectionalLight(0xffffff, 0.5)
-mainLight.position.set(30, 50, 10)
+// 光线-35F
+// const mainLight = new THREE.DirectionalLight(0xffffff, 0.5)
+// mainLight.position.set(30, 50, 10)
+// mainLight.lookAt(0, 0, 0)
+// scene.add(mainLight)
+
+// const minorLight = new THREE.DirectionalLight(0xffffff, 0.5)
+// minorLight.position.set(-100, 50, -10)
+// scene.add(minorLight)
+
+// const topLight = new THREE.HemisphereLight(0x8CB6DE, 0x000000, 0.5)
+// topLight.position.set(0, 50, 0)
+// topLight.lookAt(0, 0, 0)
+// scene.add(topLight)
+
+// 光线-振动设备
+const mainLight = new THREE.DirectionalLight(0xffffff, 1)
+mainLight.position.set(50, 50, 50)
 mainLight.lookAt(0, 0, 0)
 scene.add(mainLight)
 
-const minorLight = new THREE.DirectionalLight(0xffffff, 0.5)
-minorLight.position.set(-100, 50, -10)
+const minorLight = new THREE.DirectionalLight(0xffffff, 1)
+minorLight.position.set(-100, 50, -50)
 scene.add(minorLight)
 
 const topLight = new THREE.HemisphereLight(0x8CB6DE, 0x000000, 0.5)
 topLight.position.set(0, 50, 0)
 topLight.lookAt(0, 0, 0)
-scene.add(topLight)
+// scene.add(topLight)
 
 // 控制器
 const control = new OrbitControls(camera, renderer.domElement)
@@ -58,13 +74,20 @@ control.mouseButtons = {
 
 // Collada加载.dae模型文件
 const colladaLoader = new ColladaLoader()
-colladaLoader.load('/assets/vibration_device/e_振动设备-烘培.dae', function (result) {
+colladaLoader.load('/assets/vibration_device_4/e_振动设备-烘培4.dae', function (result) {
     console.log(result)
     const mesh = result.scene
     mesh.scale.set(0.05, 0.05, 0.05);
     mesh.position.set(0, 0, 0);
     scene.add(mesh)
 })
+// colladaLoader.load('/assets/b_35F/b_35F_3.dae', function (result) {
+//     console.log(result)
+//     const mesh = result.scene
+//     mesh.scale.set(0.05, 0.05, 0.05);
+//     mesh.position.set(0, 0, 0);
+//     scene.add(mesh)
+// })
 
 // 使得渲染器的内容大小为显示容器的大小
 function resizeRendererToDisplaySize (renderer) {
